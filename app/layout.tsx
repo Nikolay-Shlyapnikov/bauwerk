@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import { Manrope } from 'next/font/google'
 import type { ReactNode } from 'react'
 
-import { SITE_URL } from '@/config'
+import { IS_PREVIEW, SITE_URL } from '@/config'
 
 import './globals.less'
 
@@ -18,8 +18,8 @@ const description =
 	'Строительная компания с самым высоким уровнем цифровизации процессов в России: генеральный подряд, промышленное строительство, BIM и технический заказчик.'
 
 export const metadata: Metadata = {
+	appleWebApp: { title: 'Бауверк' },
 	description,
-	icons: { icon: '/favicon.svg' },
 	metadataBase: new URL(SITE_URL),
 	openGraph: {
 		description,
@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 		title,
 		type: 'website',
 	},
+	robots: IS_PREVIEW ? { follow: false, index: false } : undefined,
 	title,
 }
 

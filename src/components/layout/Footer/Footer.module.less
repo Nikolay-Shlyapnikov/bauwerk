@@ -92,3 +92,24 @@
 	letter-spacing: 0.12em;
 	color: @slate-400;
 }
+
+// пунктир снизу подсказывает, что адрес кликабельный, не перетягивая внимание
+.addressLink {
+	text-decoration: underline dotted;
+	text-decoration-color: @slate-300;
+	text-underline-offset: 3px;
+	transition:
+		color @transition,
+		text-decoration-color @transition;
+
+	&:hover {
+		color: @slate-900;
+		text-decoration-color: currentColor;
+	}
+
+	&:focus-visible {
+		outline: 2px solid @blue-500;
+		outline-offset: 2px;
+		border-radius: @smallRadius;
+	}
+}

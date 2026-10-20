@@ -101,3 +101,11 @@ cat .env                        # какой образ и адрес сейча
 docker build -t bauwerk .
 docker run --rm -p 8090:80 bauwerk   # http://localhost:8090
 ```
+
+## Временная копия на GitHub Pages
+
+Пока нет доступа к серверу, сайт публикуется на `https://<владелец>.github.io/<репозиторий>/` ([pages.yml](.github/workflows/pages.yml)) — на каждый push в `main`, параллельно с основным деплоем.
+
+- Включить один раз: **Settings → Pages → Build and deployment → Source: GitHub Actions**.
+- Сборка идёт с `BASE_PATH=/<репозиторий>` (сайт лежит в подпапке) и `PREVIEW=true` (тег `noindex`, чтобы копия не попала в поиск рядом с основным доменом).
+- Когда сайт заработает на своём домене — удалить `pages.yml` и выключить Pages в настройках.

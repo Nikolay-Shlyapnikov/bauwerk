@@ -1,6 +1,8 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+	// подпапка сайта: пусто для своего домена, /bauwerk — для GitHub Pages
+	basePath: process.env.BASE_PATH ?? '',
 	images: {
 		unoptimized: true,
 	},

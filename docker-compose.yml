@@ -1,6 +1,6 @@
 services:
   bauwerk:
-    image: ${BAUWERK_IMAGE:?BAUWERK_IMAGE не задан — его пишет CI в .env}
+    image: ${BAUWERK_IMAGE}
     ports:
       - "80:80"
       - "443:443"
