@@ -1,0 +1,88 @@
+@import '../../../styles/mixins.module';
+
+.partners {
+	background: @slate-900;
+	color: @white;
+
+	&Inner {
+		.container();
+		.sectionPadding();
+	}
+}
+
+.head {
+	display: grid;
+	gap: 40px;
+
+	@media (min-width: @lg) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.eyebrow {
+	.eyebrowText();
+	margin-bottom: 20px;
+	color: @sky-300;
+}
+
+.title {
+	.mediumTitle();
+}
+
+.description {
+	max-width: 512px;
+	align-self: end;
+	font-size: 18px;
+	line-height: 1.625;
+	color: @slate-400;
+}
+
+// minmax(0, 1fr) — колонки строго равные: с обычным 1fr длинное название растягивает свою
+.grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+	margin-top: 64px;
+
+	@media (min-width: @md) {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	@media (min-width: @lg) {
+		grid-template-columns: repeat(5, minmax(0, 1fr));
+	}
+}
+
+.partner {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 128px;
+	padding: 16px 12px;
+	border: 1px solid @white-10;
+	border-radius: @mediumRadius;
+	background: @white-5;
+	// плашка — контейнер для cqi: размер названия считается от её ширины, а не от экрана
+	container-type: inline-size;
+	line-height: 1.4;
+	font-weight: 800;
+	letter-spacing: -0.025em;
+	// длинные названия на телефоне переносятся на две строки — по центру плашки, а не по левому краю
+	text-align: center;
+	color: @slate-300;
+	transition: all @transition;
+
+	// самое длинное слово, «Мосотделстрой», ~7.7em: 100cqi / 8 — шрифт, при котором оно ещё
+	// помещается в ширину плашки. В широких плашках срабатывает потолок 18px
+	&Name {
+		font-size: ~'min(18px, calc(100cqi / 8))';
+	}
+
+	// только для мыши — на iOS подсветка после тапа «залипала» бы на плашке
+	@media (hover: hover) {
+		&:hover {
+			background: @sky-200;
+			color: @slate-950;
+		}
+	}
+}

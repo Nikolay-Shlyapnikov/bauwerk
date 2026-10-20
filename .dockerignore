@@ -1,0 +1,13 @@
+node_modules
+.next
+out
+.git
+.github
+.idea
+.claude
+*.tsbuildinfo
+next-env.d.ts
+src.zip
+Dockerfile
+docker-compose.yml
+README.md

@@ -1,0 +1,79 @@
+@import '../src/styles/vars.module';
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	scroll-behavior: smooth;
+	font-family: var(--font-manrope), sans-serif;
+	line-height: 1.5;
+	-webkit-font-smoothing: antialiased;
+}
+
+body {
+	background: @slate-900;
+}
+
+::selection {
+	background: @sky-300;
+	color: @slate-950;
+}
+
+// скроллбар: тёмная дорожка и голубой ползунок-«пилюля» в цвет акцента.
+// Chrome, Edge и Safari — через ::-webkit-scrollbar (там можно скруглить и отбить ползунок от краёв)
+::-webkit-scrollbar {
+	width: 12px;
+	height: 12px;
+}
+
+::-webkit-scrollbar-track {
+	background: @slate-950;
+}
+
+::-webkit-scrollbar-thumb {
+	// прозрачная рамка + background-clip — ползунок уже дорожки и не липнет к краям
+	border: 3px solid transparent;
+	border-radius: @pillRadius;
+	background: fade(@sky-300, 55%) padding-box;
+
+	&:hover {
+		background-color: @sky-300;
+	}
+
+	&:active {
+		background-color: @sky-200;
+	}
+}
+
+::-webkit-scrollbar-corner {
+	background: @slate-950;
+}
+
+// Firefox понимает только стандартные свойства. Применяем их лишь там, где нет webkit-скроллбара:
+// Chrome 121+, увидев scrollbar-color, перестаёт применять ::-webkit-scrollbar и теряет скругления
+@supports not selector(::-webkit-scrollbar) {
+	html {
+		scrollbar-color: fade(@sky-300, 55%) @slate-950;
+		scrollbar-width: thin;
+	}
+}
+
+h1,
+h2,
+h3 {
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+img,
+svg {
+	display: block;
+}

@@ -1,0 +1,134 @@
+@import '../../../styles/mixins.module';
+
+.hero {
+	position: relative;
+	isolation: isolate;
+	min-height: 820px;
+	padding-top: 128px;
+	overflow: hidden;
+
+	@media (min-width: @lg) {
+		min-height: 900px;
+	}
+
+	&Inner {
+		.container();
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		min-height: 690px;
+		padding-top: 80px;
+		padding-bottom: 40px;
+
+		@media (min-width: @lg) {
+			padding-top: 112px;
+		}
+	}
+}
+
+.image {
+	z-index: -2;
+	object-fit: cover;
+	object-position: center;
+}
+
+.shade {
+	&Side,
+	&Bottom {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	&Side {
+		background: linear-gradient(
+			90deg,
+			rgba(15, 23, 42, 0.98) 0%,
+			rgba(30, 41, 59, 0.82) 50%,
+			rgba(30, 41, 59, 0.2) 100%
+		);
+	}
+
+	&Bottom {
+		background: linear-gradient(0deg, @slate-900 0%, transparent 45%);
+	}
+}
+
+.content {
+	max-width: 1024px;
+}
+
+.eyebrow {
+	.eyebrowText();
+	display: flex;
+	align-items: center;
+	gap: 16px;
+	margin-bottom: 32px;
+	letter-spacing: 0.22em;
+	color: @sky-300;
+
+	&Line {
+		width: 48px;
+		height: 1px;
+		background: @sky-300;
+	}
+}
+
+.title {
+	.displayTitle();
+	max-width: 1024px;
+	font-size: ~'min(clamp(3.4rem, 8vw, 8rem), calc((100vw - 40px) / 8))';
+	line-height: 0.84;
+	letter-spacing: -0.07em;
+
+	&Accent {
+		display: block;
+		color: @sky-300;
+	}
+}
+
+.lead {
+	max-width: 576px;
+	margin-top: 36px;
+	font-size: 18px;
+	line-height: 1.625;
+	color: @slate-300;
+
+	@media (min-width: @md) {
+		font-size: 20px;
+	}
+}
+
+.stats {
+	display: grid;
+	gap: 16px;
+
+	@media (min-width: @sm) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+
+	@media (min-width: @lg) {
+		width: 66.666667%;
+	}
+}
+
+.stat {
+	padding: 20px;
+	border: 1px solid @white-15;
+	border-radius: @mediumRadius;
+	background: @white-10;
+	backdrop-filter: blur(8px);
+
+	&Value {
+		display: block;
+		font-size: 30px;
+		line-height: 36px;
+		font-weight: 800;
+	}
+
+	&Label {
+		font-size: 14px;
+		line-height: 20px;
+		color: @slate-300;
+	}
+}

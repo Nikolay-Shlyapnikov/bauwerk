@@ -1,0 +1,36 @@
+@import '../../../styles/vars.module';
+
+.logo {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+
+	&:hover .mark {
+		transform: rotate(90deg);
+	}
+}
+
+.mark {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 2px;
+	width: 40px;
+	height: 40px;
+	padding: 8px;
+	border-radius: 12px;
+	background: @sky-300;
+	transform: rotate(45deg);
+	transition: transform @transition;
+
+	&Cell {
+		border-radius: @smallRadius;
+		background: @slate-900;
+	}
+}
+
+.name {
+	font-size: 20px;
+	line-height: 28px;
+	font-weight: 800;
+	letter-spacing: 0.12em;
+}

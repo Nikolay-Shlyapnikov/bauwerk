@@ -1,0 +1,199 @@
+@import '../../../styles/mixins.module';
+
+.services {
+	background: @blue-100;
+	color: @slate-950;
+
+	&Inner {
+		.container();
+		.sectionPadding();
+	}
+}
+
+.head {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 20px;
+	margin-bottom: 64px;
+
+	@media (min-width: @md) {
+		flex-direction: row;
+		align-items: flex-end;
+	}
+}
+
+.eyebrow {
+	.eyebrowText();
+	margin-bottom: 20px;
+}
+
+.title {
+	.largeTitle();
+}
+
+.description {
+	max-width: 384px;
+	font-size: 14px;
+	line-height: 1.625;
+}
+
+.grid {
+	display: grid;
+	gap: 16px;
+	// раскрытая карточка растёт одна, не растягивая соседнюю в ряду
+	align-items: start;
+
+	@media (min-width: @md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.card {
+	position: relative;
+	padding: 28px;
+	border: 1px solid @blue-200;
+	border-radius: @largeRadius;
+	background: @white-80;
+	box-shadow: @smallShadow;
+	transition: all @transition;
+
+	&Open {
+		background: @slate-900;
+		color: @white;
+		box-shadow: @largeShadow;
+	}
+
+	// только для мыши: в iOS Safari :hover после тапа «залипает», и закрытая карточка
+	// оставалась бы тёмной и приподнятой, пока не тапнешь в другое место
+	@media (hover: hover) {
+		&:hover {
+			transform: translateY(-4px);
+			background: @slate-900;
+			color: @white;
+			box-shadow: @largeShadow;
+		}
+	}
+
+	// минимальная высота — у верхней части, а не у карточки: иначе выезжающий текст сначала съедает
+	// свободное место и заголовок уезжает вверх. 230px + паддинги и рамка = прежние 288px
+	&Main {
+		display: flex;
+		flex-direction: column;
+		min-height: 230px;
+	}
+
+	// кнопка — только название, но её ::after растянут на всю карточку: кликается вся карточка,
+	// а у h3 остаётся нормальная семантика заголовка
+	&Toggle {
+		all: unset;
+		cursor: pointer;
+
+		&::after {
+			content: '';
+			position: absolute;
+			inset: 0;
+			// явный слой обязателен: у описания opacity, у стрелки при наведении transform — оба
+			// создают свой слой и без z-index рисуются поверх ::after, перехватывая клики
+			z-index: 1;
+			border-radius: @largeRadius;
+		}
+
+		&:focus-visible::after {
+			outline: 2px solid @blue-500;
+			outline-offset: 4px;
+		}
+	}
+
+	&Number {
+		margin-bottom: auto;
+		font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		font-size: 14px;
+		line-height: 20px;
+		color: @blue-500;
+	}
+
+	&Title {
+		.displayTitle();
+		margin-top: 40px;
+		font-size: 24px;
+		line-height: 32px;
+
+		@media (min-width: @md) {
+			font-size: 30px;
+			line-height: 36px;
+		}
+	}
+
+	&Footer {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 32px;
+		margin-top: 20px;
+	}
+
+	&Text {
+		max-width: 448px;
+		font-size: 14px;
+		line-height: 1.625;
+		opacity: 0.7;
+	}
+
+	&Arrow {
+		flex-shrink: 0;
+		transition: transform @slowTransition;
+	}
+
+	@media (hover: hover) {
+		&:hover &Arrow {
+			transform: translateX(8px);
+		}
+	}
+
+	// у раскрытой стрелка смотрит вниз — на выехавший текст
+	&Open &Arrow,
+	&Open:hover &Arrow {
+		transform: rotate(90deg);
+	}
+
+	// плавная высота через grid-template-rows 0fr → 1fr: в отличие от height: auto она анимируется
+	&Details {
+		position: relative;
+		// поверх ::after кнопки — чтобы текст можно было выделить, а клик по нему не закрывал карточку
+		z-index: 2;
+		display: grid;
+		grid-template-rows: 0fr;
+		opacity: 0;
+		transition:
+			grid-template-rows @slowTransition,
+			opacity @slowTransition;
+
+		&Inner {
+			min-height: 0;
+			overflow: hidden;
+		}
+
+		&Text {
+			max-width: 560px;
+			margin-top: 20px;
+			padding-top: 20px;
+			border-top: 1px solid @white-15;
+			font-size: 14px;
+			line-height: 1.625;
+			color: @slate-300;
+		}
+	}
+
+	&Open &Details {
+		grid-template-rows: 1fr;
+		opacity: 1;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		&Arrow,
+		&Details {
+			transition: none;
+		}
+	}
+}

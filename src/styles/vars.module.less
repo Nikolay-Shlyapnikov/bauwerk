@@ -1,0 +1,52 @@
+// палитра — холодные «стальные» серые (slate) и голубой акцент (sky / blue)
+@slate-50: #f8fafc;
+@slate-100: #f1f5f9;
+@slate-300: #cbd5e1;
+@slate-400: #94a3b8;
+@slate-500: #64748b;
+@slate-600: #475569;
+@slate-700: #334155;
+@slate-900: #0f172a;
+@slate-950: #020617;
+
+@sky-100: #e0f2fe;
+@sky-200: #bae6fd;
+@sky-300: #7dd3fc;
+
+@blue-100: #dbeafe;
+@blue-200: #bfdbfe;
+@blue-500: #3b82f6;
+@blue-600: #2563eb;
+@blue-700: #1d4ed8;
+
+@white: #ffffff;
+
+// Overlay whites — полупрозрачный белый поверх тёмного фона (рамки, стеклянные карточки)
+@white-5: fade(@white, 5%);
+@white-10: fade(@white, 10%);
+@white-15: fade(@white, 15%);
+@white-25: fade(@white, 25%);
+@white-80: fade(@white, 80%);
+
+@smallShadow:
+	0 1px 3px 0 rgba(0, 0, 0, 0.1),
+	0 1px 2px -1px rgba(0, 0, 0, 0.1);
+@largeShadow:
+	0 20px 25px -5px rgba(0, 0, 0, 0.1),
+	0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+//radius's
+@smallRadius: 4px;
+@mediumRadius: 16px;
+@largeRadius: 24px;
+@pillRadius: 9999px;
+
+@transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+// для раскрытия блоков — длиннее, чтобы движение читалось
+@slowTransition: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+// breakpoints — mobile-first: стили без медиазапроса для телефона, дальше расширяем
+// использование: @media (min-width: @md) { ... }
+@sm: 640px;
+@md: 768px;
+@lg: 1024px;

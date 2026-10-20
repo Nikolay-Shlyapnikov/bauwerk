@@ -1,0 +1,9 @@
+node_modules
+.next
+out
+*.tsbuildinfo
+next-env.d.ts
+.idea
+
+# SSH-ключи деплоя — только в секретах GitHub, никогда в репозитории
+bauwerk_deploy*

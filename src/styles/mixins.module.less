@@ -1,0 +1,71 @@
+@import './vars.module';
+
+// миксины со скобками не попадают в CSS сами по себе — только туда, где их вызвали
+
+// ширина контента и боковые поля, общие для всех секций
+.container() {
+	margin: 0 auto;
+	max-width: 1440px;
+	padding-left: 20px;
+	padding-right: 20px;
+
+	@media (min-width: @md) {
+		padding-left: 40px;
+		padding-right: 40px;
+	}
+
+	@media (min-width: @lg) {
+		padding-left: 64px;
+		padding-right: 64px;
+	}
+}
+
+// вертикальные отступы обычной секции
+.sectionPadding() {
+	padding-top: 96px;
+	padding-bottom: 96px;
+
+	@media (min-width: @lg) {
+		padding-top: 128px;
+		padding-bottom: 128px;
+	}
+}
+
+// мелкая подпись капсом над заголовком секции
+.eyebrowText() {
+	font-size: 12px;
+	line-height: 16px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.2em;
+}
+
+// крупный заголовок секции капсом
+.displayTitle() {
+	font-weight: 800;
+	text-transform: uppercase;
+}
+
+// заголовок «Партнёры» / «Давайте строить вместе»: 36px → 60px
+.mediumTitle() {
+	.displayTitle();
+	font-size: 36px;
+	line-height: 1;
+	letter-spacing: -0.04em;
+
+	@media (min-width: @md) {
+		font-size: 60px;
+	}
+}
+
+// заголовок «Услуги» / «Строим школы»: 48px → 72px
+.largeTitle() {
+	.displayTitle();
+	font-size: 48px;
+	line-height: 1;
+	letter-spacing: -0.05em;
+
+	@media (min-width: @md) {
+		font-size: 72px;
+	}
+}

@@ -1,0 +1,203 @@
+@import '../../../styles/mixins.module';
+
+.portfolio {
+	background: @slate-50;
+	color: @slate-950;
+
+	&Inner {
+		.container();
+		.sectionPadding();
+	}
+}
+
+.head {
+	display: grid;
+	gap: 32px;
+	margin-bottom: 56px;
+
+	@media (min-width: @lg) {
+		grid-template-columns: repeat(2, 1fr);
+		align-items: end;
+	}
+}
+
+.eyebrow {
+	.eyebrowText();
+	margin-bottom: 20px;
+	color: @blue-600;
+}
+
+.title {
+	.largeTitle();
+	line-height: 0.95;
+
+	&Muted {
+		display: block;
+		color: @slate-400;
+	}
+}
+
+.description {
+	max-width: 512px;
+	justify-self: end;
+	font-size: 18px;
+	line-height: 1.625;
+	color: @slate-600;
+}
+
+.grid {
+	display: grid;
+	gap: 20px;
+
+	@media (min-width: @md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.card {
+	position: relative;
+	min-height: 480px;
+	overflow: hidden;
+	border-radius: @largeRadius;
+	background: @slate-900;
+
+	@media (min-width: @md) {
+		min-height: 500px;
+	}
+
+	&Tall {
+		@media (min-width: @md) {
+			min-height: 620px;
+		}
+	}
+
+	&Image {
+		object-fit: cover;
+		transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	// только для мыши — на iOS увеличение после тапа «залипало» бы на карточке
+	@media (hover: hover) {
+		&:hover &Image {
+			transform: scale(1.05);
+		}
+	}
+
+	&Shade {
+		position: absolute;
+		inset: 0;
+		background: linear-gradient(to top, @slate-950, fade(@slate-950, 25%), transparent);
+	}
+
+	&Body {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		padding: 28px;
+		color: @white;
+
+		@media (min-width: @md) {
+			padding: 36px;
+		}
+	}
+
+	&Meta {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		margin-bottom: 20px;
+		font-size: 12px;
+		line-height: 16px;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.16em;
+		color: @sky-200;
+	}
+
+	&Year {
+		padding: 6px 12px;
+		border: 1px solid @white-25;
+		border-radius: @pillRadius;
+		background: @white-10;
+		backdrop-filter: blur(8px);
+	}
+
+	&Footer {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 8px 20px;
+		padding-top: 20px;
+		border-top: 1px solid @white-25;
+	}
+
+	&Title {
+		.displayTitle();
+		max-width: 448px;
+		// самое длинное слово в названиях, «Образовательный», занимает ~10.3em, а ширина текста
+		// в карточке на телефоне — экран минус 40px полей и 56px паддингов: на 320px 24px не влезает
+		font-size: ~'min(24px, calc((100vw - 96px) / 10.5))';
+		line-height: 1.25;
+
+		// в две колонки карточки становятся шире 30px-заголовка только с @lg
+		@media (min-width: @lg) {
+			font-size: 30px;
+		}
+	}
+
+	&Area {
+		flex-shrink: 0;
+		font-size: 14px;
+		line-height: 20px;
+		color: @slate-300;
+	}
+}
+
+.cta {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin-top: 32px;
+	padding: 28px;
+	border-radius: @largeRadius;
+	background: @blue-100;
+
+	@media (min-width: @sm) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+
+	@media (min-width: @md) {
+		padding: 36px;
+	}
+
+	&Text {
+		max-width: 672px;
+		font-size: 18px;
+		line-height: 28px;
+		font-weight: 600;
+		color: @slate-700;
+	}
+
+	&Button {
+		display: flex;
+		flex-shrink: 0;
+		align-items: center;
+		gap: 12px;
+		padding: 16px 24px;
+		border-radius: @pillRadius;
+		background: @slate-900;
+		color: @white;
+		font-size: 14px;
+		line-height: 20px;
+		font-weight: 700;
+		transition: background-color @transition;
+
+		&:hover {
+			background: @blue-700;
+		}
+	}
+}

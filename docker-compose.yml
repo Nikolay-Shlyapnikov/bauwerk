@@ -1,0 +1,17 @@
+services:
+  bauwerk:
+    image: ${BAUWERK_IMAGE:?BAUWERK_IMAGE не задан — его пишет CI в .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      - SITE_ADDRESS=${SITE_ADDRESS:-:80}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    restart: unless-stopped
+
+volumes:
+  caddy-data:
+  caddy-config:

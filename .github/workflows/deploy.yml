@@ -1,0 +1,132 @@
+name: bauwerk ci/cd
+
+on:
+  pull_request:
+    branches: ["main"]
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # версия pnpm — из packageManager в package.json
+      - name: setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: pnpm
+
+      - name: install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: lint (eslint)
+        run: pnpm lint
+
+      - name: formatter (prettier)
+        run: pnpm format:check
+
+      - name: typecheck
+        run: pnpm typecheck
+
+      - name: build
+        run: pnpm build
+
+  build-and-push:
+    needs: check
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.image.outputs.image }}
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: image name
+        id: image
+        run: |
+          repo="ghcr.io/${GITHUB_REPOSITORY,,}"
+          echo "image=$repo:sha-${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+          echo "latest=$repo:latest" >> "$GITHUB_OUTPUT"
+
+      - name: login to ghcr
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - name: build and push docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ steps.image.outputs.image }}
+            ${{ steps.image.outputs.latest }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: copy docker-compose to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/opt/bauwerk/"
+
+      - name: run docker compose on server
+        uses: appleboy/ssh-action@v1.0.3
+        env:
+          BAUWERK_IMAGE: ${{ needs.build-and-push.outputs.image }}
+          SITE_ADDRESS: ${{ vars.SITE_ADDRESS || ':80' }}
+          REGISTRY_USER: ${{ github.actor }}
+          REGISTRY_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          envs: BAUWERK_IMAGE,SITE_ADDRESS,REGISTRY_USER,REGISTRY_TOKEN
+          script_stop: true
+          script: |
+            cd /opt/bauwerk
+            printf 'BAUWERK_IMAGE=%s\nSITE_ADDRESS=%s\n' "$BAUWERK_IMAGE" "$SITE_ADDRESS" > .env
+
+            echo "$REGISTRY_TOKEN" | docker login ghcr.io -u "$REGISTRY_USER" --password-stdin
+            docker compose pull
+            docker logout ghcr.io
+
+            docker compose up -d --remove-orphans
+            docker image prune -f
+
+            # деплой считается успешным, только если контейнер поднялся и не падает
+            sleep 5
+            docker compose ps --status running --quiet bauwerk | grep -q . \
+              || { docker compose logs --tail 50 bauwerk; exit 1; }

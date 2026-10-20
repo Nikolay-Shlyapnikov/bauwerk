@@ -1,0 +1,67 @@
+@import '../../../styles/mixins.module';
+
+.about {
+	background: @slate-100;
+	color: @slate-950;
+
+	&Inner {
+		.container();
+		display: grid;
+		gap: 48px;
+		padding-top: 96px;
+		padding-bottom: 96px;
+
+		@media (min-width: @lg) {
+			grid-template-columns: 0.65fr 1.35fr;
+			padding-top: 144px;
+			padding-bottom: 144px;
+		}
+	}
+}
+
+.eyebrow {
+	.eyebrowText();
+	color: @slate-500;
+}
+
+.company {
+	margin-top: 16px;
+	font-size: 14px;
+	line-height: 20px;
+	color: @slate-500;
+}
+
+.title {
+	.displayTitle();
+	max-width: 896px;
+	font-size: 36px;
+	line-height: 1.02;
+	letter-spacing: -0.04em;
+
+	@media (min-width: @md) {
+		font-size: 60px;
+	}
+
+	&Muted {
+		color: @slate-400;
+	}
+}
+
+.cards {
+	display: grid;
+	gap: 20px;
+	margin-top: 56px;
+
+	@media (min-width: @md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.card {
+	padding: 28px;
+	border-radius: @largeRadius;
+	background: @white;
+	box-shadow: @smallShadow;
+	line-height: 1.625;
+	color: @slate-600;
+}
