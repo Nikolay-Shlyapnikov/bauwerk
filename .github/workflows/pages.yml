@@ -21,9 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # отдаёт подпапку сайта (/bauwerk) — по ней Next строит пути к стилям и скриптам
       - name: configure pages
-        id: pages
         uses: actions/configure-pages@v5
 
       - name: setup pnpm
@@ -41,7 +39,9 @@ jobs:
       - name: build
         run: pnpm build
         env:
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
+          # сайт на <владелец>.github.io/<репозиторий>/ — подпапка всегда совпадает с именем репозитория.
+          # base_path из configure-pages бывает пустым, и тогда стили и скрипты ищутся в корне и отдают 404
+          BASE_PATH: /${{ github.event.repository.name }}
           PREVIEW: "true"
 
       - name: upload artifact
